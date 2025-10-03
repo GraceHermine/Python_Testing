@@ -28,6 +28,8 @@ def loadCompetitions():
 
         return upcoming_competitions
     
+reservations = {}   
+
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
@@ -80,15 +82,20 @@ def purchasePlaces():
     available_places = int(competition['numberOfPlaces'])
     club_points = int(club['points'])
 
+    already_reserved = reservations.get((club_name, competition_name), 0)
+
     if placesRequired <= 0:
         flash("⚠️ Vous devez réserver au moins 1 place.")
     elif placesRequired > available_places:
         flash(f"⚠️ Pas assez de places disponibles (il reste {available_places}).")
     elif placesRequired > club_points:
         flash(f"⚠️ Pas assez de points. Vous avez {club_points} points.")
+    elif already_reserved + placesRequired > 12:
+        flash("Vous ne pouvez pas réserver plus de 12 places au totals." f"Vous avez réseveé en tout {already_reserved}")
     else:
         competition['numberOfPlaces'] = available_places - placesRequired
         club['points'] = club_points - placesRequired
+        reservations[(club_name, competition_name)] = already_reserved + placesRequired
         flash("Réservation confirmée !")
 
     return render_template('welcome.html', club=club, competitions=competitions)

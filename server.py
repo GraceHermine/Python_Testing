@@ -38,32 +38,60 @@ clubs = loadClubs()
 def index():
     return render_template('index.html')
 
+
+
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
     club = [club for club in clubs if club['email'] == request.form['email']][0]
     return render_template('welcome.html',club=club,competitions=competitions)
 
-
 @app.route('/book/<competition>/<club>')
-def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
+def book(competition, club):
+    foundCompetition = next((c for c in competitions if c['name'] == competition), None)
+    foundClub = next((c for c in clubs if c['name'] == club), None)
+
     if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
+        return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        flash("❌ Club ou compétition introuvable, merci de réessayer.")
+        return render_template('welcome.html', club=foundClub, competitions=competitions)
 
 
-@app.route('/purchasePlaces',methods=['POST'])
+@app.route('/purchasePlaces', methods=['POST'])
 def purchasePlaces():
-    competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-    club = [c for c in clubs if c['name'] == request.form['club']][0]
-    placesRequired = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-    flash('Great-booking complete!')
-    return render_template('welcome.html', club=club, competitions=competitions)
+    competition_name = request.form.get('competition')
+    club_name = request.form.get('club')
 
+    # Récupération club et compétition
+    competition = next((c for c in competitions if c['name'] == competition_name), None)
+    club = next((c for c in clubs if c['name'] == club_name), None)
+
+    if not competition or not club:
+        flash("❌ Erreur : club ou compétition introuvable.")
+        return redirect(url_for('index'))
+
+    # Vérification du nombre de places
+    try:
+        placesRequired = int(request.form.get('places'))
+    except (ValueError, TypeError):
+        flash("⚠️ Nombre de places invalide.")
+        return redirect(url_for('index'))
+
+    available_places = int(competition['numberOfPlaces'])
+    club_points = int(club['points'])
+
+    if placesRequired <= 0:
+        flash("⚠️ Vous devez réserver au moins 1 place.")
+    elif placesRequired > available_places:
+        flash(f"⚠️ Pas assez de places disponibles (il reste {available_places}).")
+    elif placesRequired > club_points:
+        flash(f"⚠️ Pas assez de points. Vous avez {club_points} points.")
+    else:
+        competition['numberOfPlaces'] = available_places - placesRequired
+        club['points'] = club_points - placesRequired
+        flash("Réservation confirmée !")
+
+    return render_template('welcome.html', club=club, competitions=competitions)
 
 # TODO: Add route for points display
 

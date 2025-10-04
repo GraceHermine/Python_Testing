@@ -36,11 +36,19 @@ app.secret_key = 'something_special'
 competitions = loadCompetitions()
 clubs = loadClubs()
 
+@app.route('/previews')
+def showCompetitions():
+    for club in clubs:
+        club["total_reserved"] = 0
+    return render_template('dashboard.html', clubs=clubs, datetime=datetime)
+
 @app.route('/')
 def index():
+    return redirect(url_for('showCompetitions'))
+
+@app.route('/connexion')
+def connexion():
     return render_template('index.html')
-
-
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
@@ -99,6 +107,25 @@ def purchasePlaces():
         flash("Réservation confirmée !")
 
     return render_template('welcome.html', club=club, competitions=competitions)
+
+# @app.route('/clubs')
+# def schowClubs():
+#     clubs_reservations = []
+
+#     for club in clubs:
+#         club_name = club['name']
+#         total_reservation = 0
+#         competions_reserver = []
+
+#         for (c_nom, comp_nom), places in reservations.items():
+#             if c_nom == club_name:
+#                 total_reservation += places 
+#                 competions_reserver.append(f"{comp_nom} ({places} places)" )
+
+#         clubs_reservations.append({"name": club_name, "points": club['points'], "total_reservation": total_reservation, "compétitions": competions_reserver if competions_reserver else ["Aucune réservation"]})
+
+#     return render_template("dashboard.html", clubs=clubs_reservations)
+
 
 # TODO: Add route for points display
 

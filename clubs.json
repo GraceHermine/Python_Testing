@@ -16,6 +16,47 @@
     {   "name":"FC Real",
         "email": "dedjeneg@gmail.com",
         "points":"14"
+    },
+
+    {
+      "name": "CodeMasters",
+      "email": "codemasters2025@gmail.com",
+      "points": "25"
+    },
+    {
+      "name": "BuildTech",
+      "email": "buildtech21@gmail.com",
+      "points": "18"
+    },
+    {
+      "name": "NetWarriors",
+      "email": "netwarriors77@gmail.com",
+      "points": "30"
+    },
+    {
+      "name": "CivilPro",
+      "email": "civilpro09@gmail.com",
+      "points": "22"
+    },
+    {
+      "name": "AlgoGenius",
+      "email": "algogenius33@gmail.com",
+      "points": "27"
+    },
+    {
+      "name": "StructuraTeam",
+      "email": "structura88@gmail.com",
+      "points": "15"
+    },
+    {
+      "name": "TelecomForce",
+      "email": "telecomforce12@gmail.com",
+      "points": "20"
+    },
+    {
+      "name": "DevInnov",
+      "email": "devinnov99@gmail.com",
+      "points": "26"
     }
 
 ]}

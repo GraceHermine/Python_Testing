@@ -80,7 +80,7 @@ def book(competition, club):
     if foundClub and foundCompetition:
         return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
-        flash("❌ Club ou compétition introuvable, merci de réessayer.")
+        flash("Club ou compétition introuvable, merci de réessayer.")
         return render_template('welcome.html', club=foundClub, competitions=competitions)
 
 
@@ -94,14 +94,14 @@ def purchasePlaces():
     club = next((c for c in clubs if c['name'] == club_name), None)
 
     if not competition or not club:
-        flash("❌ Erreur : club ou compétition introuvable.")
+        flash("Erreur : club ou compétition introuvable.")
         return redirect(url_for('index'))
 
     # Vérification du nombre de places
     try:
         placesRequired = int(request.form.get('places'))
     except (ValueError, TypeError):
-        flash("⚠️ Nombre de places invalide.")
+        flash("Nombre de places invalide.")
         return redirect(url_for('index'))
 
     available_places = int(competition['numberOfPlaces'])
@@ -110,11 +110,11 @@ def purchasePlaces():
     already_reserved = reservations.get((club_name, competition_name), 0)
 
     if placesRequired <= 0:
-        flash("⚠️ Vous devez réserver au moins 1 place.")
+        flash("Vous devez réserver au moins 1 place.")
     elif placesRequired > available_places:
-        flash(f"⚠️ Pas assez de places disponibles (il reste {available_places}).")
+        flash(f"Pas assez de places disponibles (il reste {available_places}).")
     elif placesRequired > club_points:
-        flash(f"⚠️ Pas assez de points. Vous avez {club_points} points.")
+        flash(f"Pas assez de points. Vous avez {club_points} points.")
     elif already_reserved + placesRequired > 12:
         flash("Vous ne pouvez pas réserver plus de 12 places au totals." f"Vous avez réseveé en tout {already_reserved}")
     else:

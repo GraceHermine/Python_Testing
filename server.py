@@ -72,16 +72,36 @@ def showSummary():
     club = [club for club in clubs if club['email'] == request.form['email']][0]
     return render_template('welcome.html',club=club,competitions=competitions)
 
+# @app.route('/book/<competition>/<club>')
+# def book(competition, club):
+#     foundCompetition = next((c for c in competitions if c['name'] == competition), None)
+#     foundClub = next((c for c in clubs if c['name'] == club), None)
+
+#     if foundClub and foundCompetition:
+#         return render_template('booking.html', club=foundClub, competition=foundCompetition)
+#     else:
+#         flash("Club ou compétition introuvable, merci de réessayer.")
+#         return render_template('welcome.html', club=foundClub, competitions=competitions)
+
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
     foundCompetition = next((c for c in competitions if c['name'] == competition), None)
     foundClub = next((c for c in clubs if c['name'] == club), None)
 
     if foundClub and foundCompetition:
-        return render_template('booking.html', club=foundClub, competition=foundCompetition)
+        already_reserved = reservations.get((foundClub['name'], foundCompetition['name']), 0)
+        remaining = 12 - already_reserved  # puisque ta logique est max 12
+
+        return render_template(
+            'booking.html',
+            club=foundClub,
+            competition=foundCompetition,
+            remaining=remaining
+        )
     else:
         flash("Club ou compétition introuvable, merci de réessayer.")
         return render_template('welcome.html', club=foundClub, competitions=competitions)
+
 
 
 @app.route('/purchasePlaces', methods=['POST'])

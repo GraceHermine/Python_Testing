@@ -1,13 +1,13 @@
 import json
 # import datetime
 from datetime import datetime
-from flask import Flask,render_template,request,redirect,flash,url_for
+from flask import Flask, render_template, request, redirect, flash, url_for
 
 
 def loadClubs():
     with open('clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
+        listOfClubs = json.load(c)['clubs']
+        return listOfClubs
 
 
 # def loadCompetitions():
@@ -27,14 +27,15 @@ def loadCompetitions():
                 upcoming_competitions.append(comp)
 
         return upcoming_competitions
-    
-reservations = {}   
 
+
+reservations = {}
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
+
 
 @app.route('/previews')
 def showCompetitions():
@@ -56,40 +57,59 @@ def showCompetitions():
             "total_reserved": total_reserved
         })
 
-    return render_template('dashboard.html', clubs=clubs_reservations, datetime=datetime)
+    return render_template(
+        'dashboard.html',
+        clubs=clubs_reservations,
+        datetime=datetime
+    )
 
 
 @app.route('/')
 def index():
     return redirect(url_for('showCompetitions'))
 
+
 @app.route('/connexion')
 def connexion():
     return render_template('index.html')
 
-@app.route('/showSummary',methods=['POST'])
+
+@app.route('/showSummary', methods=['POST'])
 def showSummary():
-    club = [club for club in clubs if club['email'] == request.form['email']][0]
-    return render_template('welcome.html',club=club,competitions=competitions)
+    email = request.form.get('email', '').strip()
 
-# @app.route('/book/<competition>/<club>')
-# def book(competition, club):
-#     foundCompetition = next((c for c in competitions if c['name'] == competition), None)
-#     foundClub = next((c for c in clubs if c['name'] == club), None)
+    if not email:
+        flash("Veuillez entrer un email.")
+        return redirect(url_for('connexion'))
 
-#     if foundClub and foundCompetition:
-#         return render_template('booking.html', club=foundClub, competition=foundCompetition)
-#     else:
-#         flash("Club ou compétition introuvable, merci de réessayer.")
-#         return render_template('welcome.html', club=foundClub, competitions=competitions)
+    # Recherche du club
+    club = next((c for c in clubs if c['email'] == email), None)
+
+    if not club:
+        flash("Email inconnu, veuillez ressayer.")
+        return redirect(url_for('connexion'))
+
+    # Si le club est trouvé → affichage normal
+    return render_template(
+        'welcome.html',
+        club=club,
+        competitions=competitions
+    )
 
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
-    foundCompetition = next((c for c in competitions if c['name'] == competition), None)
-    foundClub = next((c for c in clubs if c['name'] == club), None)
+    foundCompetition = next(
+        (c for c in competitions if c['name'] == competition),
+    None)
+    foundClub = next(
+        (c for c in clubs if c['name'] == club),
+        None)
 
     if foundClub and foundCompetition:
-        already_reserved = reservations.get((foundClub['name'], foundCompetition['name']), 0)
+        already_reserved = reservations.get(
+            (foundClub['name'],
+            foundCompetition['name']),
+        0)
         remaining = 12 - already_reserved  # puisque ta logique est max 12
 
         return render_template(
@@ -100,8 +120,11 @@ def book(competition, club):
         )
     else:
         flash("Club ou compétition introuvable, merci de réessayer.")
-        return render_template('welcome.html', club=foundClub, competitions=competitions)
-
+        return render_template(
+            'welcome.html',
+            club=foundClub,
+            competitions=competitions
+            )
 
 
 @app.route('/purchasePlaces', methods=['POST'])
@@ -110,8 +133,12 @@ def purchasePlaces():
     club_name = request.form.get('club')
 
     # Récupération club et compétition
-    competition = next((c for c in competitions if c['name'] == competition_name), None)
-    club = next((c for c in clubs if c['name'] == club_name), None)
+    competition = next(
+        (c for c in competitions if c['name'] == competition_name),
+        None)
+    club = next(
+        (c for c in clubs if c['name'] == club_name),
+        None)
 
     if not competition or not club:
         flash("Erreur : club ou compétition introuvable.")
@@ -136,12 +163,13 @@ def purchasePlaces():
     elif placesRequired > club_points:
         flash(f"Pas assez de points. Vous avez {club_points} points.")
     elif already_reserved + placesRequired > 12:
-        flash("Vous ne pouvez pas réserver plus de 12 places au totals." f"Vous avez réseveé en tout {already_reserved}")
+        # flash("Vous ne pouvez pas réserver plus de 12 places au totals." f"Vous avez réseveé en tout {already_reserved}")
+        flash("Vous ne pouvez pas reserver plus de 12 places.")
     else:
         competition['numberOfPlaces'] = available_places - placesRequired
         club['points'] = club_points - placesRequired
         reservations[(club_name, competition_name)] = already_reserved + placesRequired
-        flash("Réservation confirmée !")
+        flash("Reservation confirmee !")
 
     return render_template('welcome.html', club=club, competitions=competitions)
 

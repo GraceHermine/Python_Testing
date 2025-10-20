@@ -21,17 +21,16 @@
     </div>
 
     <!-- Messages -->
-    {% with messages = get_flashed_messages()%}
+    {% with messages = get_flashed_messages() %}
     {% if messages %}
-        <div class="alert alert-info">
-            <ul class="mb-0">
-                {% for message in messages %}
-                    <li>{{message}}</li>
-                {% endfor %}
-            </ul>
+        <div class="alert alert-success mt-3 text-center">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
         </div>
     {% endif %}
     {% endwith %}
+
 
     <!-- Points -->
     <div class="mb-4">

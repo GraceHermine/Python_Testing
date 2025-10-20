@@ -12,6 +12,18 @@
         <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png"
              alt="illustration" class="img-fluid mb-3" style="max-width: 180px;">
         <h1>Connexion</h1>
+
+        <!-- ✅ Messages flash ici -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-warning mt-3 text-center">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
         <form action="/showSummary" method="post">
             <input type="email" name="email" placeholder="Entrez votre email" required>
             <button type="submit">Se connecter</button>

@@ -164,7 +164,7 @@ def purchasePlaces():
         flash(f"Pas assez de points. Vous avez {club_points} points.")
     elif already_reserved + placesRequired > 12:
         # flash("Vous ne pouvez pas réserver plus de 12 places au totals." f"Vous avez réseveé en tout {already_reserved}")
-        flash("Vous ne pouvez pas reserver plus de 12 places.")
+        flash("Vous ne pouvez pas réserver plus de 12 places.")
     else:
         competition['numberOfPlaces'] = available_places - placesRequired
         club['points'] = club_points - placesRequired

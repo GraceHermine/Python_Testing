@@ -1,46 +1,132 @@
+/* 🎨 --- Fond animé --- */
 body {
-            background: linear-gradient(135deg, rgba(85, 167, 180, 0.9), rgba(230, 188, 133, 0.7),  rgba(108, 150, 223, 0.7) );
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Poppins', sans-serif;
-        }
-        .login-container {
-            position: relative;
-            width: 400px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.2);
-            text-align: center;
-            color: #fff;
-        }
-        .login-container h1 {
-            font-weight: 600;
-            margin-bottom: 25px;
-        }
-        .login-container input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 30px;
-            outline: none;
-            text-align: center;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 30px;
-            background-color: #ff9100;
-            color: #fff;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .login-container button:hover {
-            background-color: #ffb347;
-        }
+    margin: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(-45deg, #f5af19, #ffcc70, #f9f7f7, #ffe29f);
+    background-size: 400% 400%;
+    animation: gradientFlow 10s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 🪞 --- Conteneur principal --- */
+.login-container {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: fadeIn 1.2s ease forwards, floatUp 2s ease infinite alternate;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+/* ✨ --- Titre --- */
+.login-container h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+    animation: slideDown 1.3s ease-out;
+}
+
+@keyframes slideDown {
+    0% { transform: translateY(-40px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* 💌 --- Formulaire --- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: appear 1.5s ease-in-out;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+input {
+    border: none;
+    outline: none;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.03);
+    box-shadow: 0 0 10px #f5af19;
+}
+
+button {
+    background: linear-gradient(45deg, #f5af19, #f0c93d);
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(245, 175, 25, 0.4);
+}
+
+button:hover {
+    background: linear-gradient(45deg, #ffb300, #f5af19);
+    transform: scale(1.05);
+    box-shadow: 0 6px 14px rgba(245, 175, 25, 0.6);
+}
+
+/* 🖼️ --- Image --- */
+.logo-anim {
+  width: 160px;
+  border-radius: 50%;
+  transition: transform 3s ease-in-out;
+  transform-style: preserve-3d;
+  animation: bounceIn 1.4s ease forwards, spinZoom 8s ease-in-out infinite;
+}
+
+/* Animation d'apparition */
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Rotation + agrandissement au demi-tour */
+@keyframes spinZoom {
+  0%   { transform: rotateY(0deg) scale(1); }
+  50%  { transform: rotateY(180deg) scale(1.2); }
+  100% { transform: rotateY(360deg) scale(1); }
+}
+
+/* ⚠️ --- Messages flash --- */
+.alert {
+    animation: pulse 1.2s infinite alternate;
+}
+
+@keyframes pulse {
+    from { background-color: rgba(255, 243, 205, 0.7); }
+    to { background-color: rgba(255, 243, 205, 1); }
+}

@@ -17,7 +17,7 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* 🪞 --- Conteneur principal --- */
+
 .login-container {
     background: rgba(255, 255, 255, 0.15);
     border-radius: 20px;
@@ -39,7 +39,7 @@ body {
     100% { transform: translateY(-10px); }
 }
 
-/* ✨ --- Titre --- */
+
 .login-container h1 {
     font-size: 2rem;
     color: #333;
@@ -52,7 +52,7 @@ body {
     100% { transform: translateY(0); opacity: 1; }
 }
 
-/* 💌 --- Formulaire --- */
+
 form {
     display: flex;
     flex-direction: column;
@@ -98,7 +98,7 @@ button:hover {
     box-shadow: 0 6px 14px rgba(245, 175, 25, 0.6);
 }
 
-/* 🖼️ --- Image --- */
+
 .logo-anim {
   width: 160px;
   border-radius: 50%;
@@ -107,21 +107,21 @@ button:hover {
   animation: bounceIn 1.4s ease forwards, spinZoom 8s ease-in-out infinite;
 }
 
-/* Animation d'apparition */
+
 @keyframes bounceIn {
   0% { transform: scale(0.5); opacity: 0; }
   60% { transform: scale(1.2); opacity: 1; }
   100% { transform: scale(1); }
 }
 
-/* Rotation + agrandissement au demi-tour */
+
 @keyframes spinZoom {
   0%   { transform: rotateY(0deg) scale(1); }
   50%  { transform: rotateY(180deg) scale(1.2); }
   100% { transform: rotateY(360deg) scale(1); }
 }
 
-/* ⚠️ --- Messages flash --- */
+
 .alert {
     animation: pulse 1.2s infinite alternate;
 }
